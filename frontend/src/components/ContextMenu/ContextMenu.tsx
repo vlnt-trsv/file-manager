@@ -40,7 +40,7 @@ export function ContextMenu() {
         className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
       >
         <FolderPlus size={15} className="text-yellow-500" />
-        New Folder
+        Создать папку
       </button>
 
       <button
@@ -51,7 +51,7 @@ export function ContextMenu() {
         className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
       >
         <FilePlus size={15} className="text-blue-500" />
-        New File
+        Создать файл
       </button>
 
       {node && (
@@ -63,7 +63,7 @@ export function ContextMenu() {
             className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
           >
             <Pencil size={15} className="text-gray-500" />
-            Rename
+            Переименовать
           </button>
 
           <button
@@ -71,7 +71,7 @@ export function ContextMenu() {
             className="flex items-center gap-2 w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50"
           >
             <Trash2 size={15} />
-            Delete
+            Удалить
           </button>
         </>
       )}
