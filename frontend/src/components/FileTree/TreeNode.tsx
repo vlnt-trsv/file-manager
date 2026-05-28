@@ -5,6 +5,7 @@ import { useChildren } from "../../hooks/useNodes";
 import { useMoveNode } from "../../hooks/useNodes";
 import type { FileNode } from "../../types";
 import { useExplorerStore } from "../../store/explorerStore";
+import { useLongPress } from "../../hooks/useLongPress";
 
 interface Props {
   node: FileNode;
@@ -50,10 +51,15 @@ export function TreeNode({ node }: Props) {
     openContextMenu(e.clientX, e.clientY, node);
   };
 
+  const longPress = useLongPress(() => {
+    openContextMenu(window.innerWidth / 2, window.innerHeight / 2, node);
+  });
+
   return (
     <div>
       <div
         ref={divRef}
+        {...longPress}
         onClick={handleClick}
         onContextMenu={handleContextMenu}
         className={`

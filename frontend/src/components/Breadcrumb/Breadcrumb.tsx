@@ -5,7 +5,7 @@ export function Breadcrumb() {
   const { breadcrumbs, popBreadcrumbTo } = useExplorerStore()
 
   return (
-    <div className="flex items-center gap-1 px-4 py-2 bg-white text-sm">
+    <div className="flex items-center gap-1 px-4 py-2 bg-white text-sm max-md:hidden">
       <button
         onClick={() => popBreadcrumbTo(null)}
         className="flex items-center gap-1 text-gray-500 hover:text-blue-600 transition-colors"

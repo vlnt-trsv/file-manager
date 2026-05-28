@@ -39,7 +39,7 @@ export function FileGrid({ search }: Props) {
         className="flex items-center justify-center h-full text-gray-400 text-sm"
         onClick={handleBackgroundClick}
       >
-        {search ? "Nothing found" : "This folder is empty"}
+        {search ? "Ничего не найдено" : "Эта папка пуста"}
       </div>
     );
   }

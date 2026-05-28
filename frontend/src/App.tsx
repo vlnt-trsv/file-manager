@@ -33,17 +33,17 @@ function FileManager() {
           placeholder="Поиск..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="ml-auto w-64 px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="ml-auto w-64 px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 max-md:w-full"
         />
       </header>
 
-      <div className="flex flex-1 overflow-hidden">
-        <aside className="w-64 bg-white border-r border-gray-200 overflow-y-auto">
+      <div className="flex flex-1 overflow-hidden max-md:flex-col">
+        <aside className="w-64 bg-white border-r border-gray-200 overflow-y-auto max-md:w-full max-md:border-r-0 max-md:border-b">
           <FileTree />
         </aside>
 
         <main
-          className="flex-1 overflow-y-auto p-4"
+          className="flex-1 overflow-y-auto p-2"
           onContextMenu={handleRootContextMenu}
         >
           <FileGrid search={search} />

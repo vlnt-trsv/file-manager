@@ -1,15 +1,9 @@
 import { useDrag, useDrop } from "react-dnd";
-import {
-  File,
-  FileText,
-  FileImage,
-  Music,
-  Film,
-  Folder,
-} from "lucide-react";
+import { File, FileText, FileImage, Music, Film, Folder } from "lucide-react";
 import { useMoveNode } from "../../hooks/useNodes";
 import type { FileNode } from "../../types";
 import { useExplorerStore } from "../../store/explorerStore";
+import { useLongPress } from "../../hooks/useLongPress";
 
 interface Props {
   node: FileNode;
@@ -79,8 +73,13 @@ export function FileItem({ node, onDoubleClick }: Props) {
     openContextMenu(e.clientX, e.clientY, node);
   };
 
+  const longPress = useLongPress(() => {
+    openContextMenu(window.innerWidth / 2, window.innerHeight / 2, node);
+  });
+
   return (
     <div
+      {...longPress}
       ref={ref}
       onClick={handleClick}
       onDoubleClick={() => onDoubleClick(node)}
