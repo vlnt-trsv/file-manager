@@ -1,13 +1,13 @@
-import { useState } from "react";
-import { ChevronRight, ChevronDown, Folder, FolderOpen } from "lucide-react";
+import { useRef, useState } from "react";
+import { ChevronRight, ChevronDown, Folder } from "lucide-react";
 import { useDrop } from "react-dnd";
 import { useChildren } from "../../hooks/useNodes";
 import { useMoveNode } from "../../hooks/useNodes";
-import type { Node } from "../../types";
+import type { FileNode } from "../../types";
 import { useExplorerStore } from "../../store/explorerStore";
 
 interface Props {
-  node: Node;
+  node: FileNode;
 }
 
 export function TreeNode({ node }: Props) {
@@ -23,7 +23,7 @@ export function TreeNode({ node }: Props) {
   const { data: children } = useChildren(expanded ? node.id : null);
   const moveNode = useMoveNode();
 
-  const [{ isOver }, drop] = useDrop({
+  const [{ isOver }] = useDrop({
     accept: "NODE",
     drop: (item: { id: string }) => {
       if (item.id !== node.id) {
@@ -33,20 +33,15 @@ export function TreeNode({ node }: Props) {
     collect: (monitor) => ({ isOver: monitor.isOver() }),
   });
 
+  const divRef = useRef<HTMLDivElement>(null);
+
   const isActive = currentFolderId === node.id;
-  const hasChildren =
-    expanded && children && children.some((child) => child.type === "FOLDER");
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     setExpanded(!expanded);
     setCurrentFolderId(node.id);
-
-    if (!currentFolderId) {
-      pushBreadcrumb(node);
-    } else {
-      pushBreadcrumb(node);
-    }
+    pushBreadcrumb(node);
   };
 
   const handleContextMenu = (e: React.MouseEvent) => {
@@ -58,7 +53,7 @@ export function TreeNode({ node }: Props) {
   return (
     <div>
       <div
-        ref={drop}
+        ref={divRef}
         onClick={handleClick}
         onContextMenu={handleContextMenu}
         className={`
@@ -70,15 +65,10 @@ export function TreeNode({ node }: Props) {
         <span className="text-gray-400 w-4 flex-shrink-0">
           {expanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
         </span>
-        {expanded ? (
-          <FolderOpen size={16} className="text-yellow-500 flex-shrink-0" />
-        ) : (
-          <Folder size={16} className="text-yellow-500 flex-shrink-0" />
-        )}
+        <Folder size={16} className="text-yellow-500 flex-shrink-0" />
         <span className="truncate">{node.name}</span>
       </div>
 
-      {/* Рекурсивно рендерим дочерние папки */}
       {expanded && children && (
         <div className="ml-4">
           {children

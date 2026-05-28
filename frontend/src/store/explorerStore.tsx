@@ -1,10 +1,10 @@
 import { create } from "zustand";
-import type { Node } from "../types";
+import type { FileNode } from "../types";
 
 interface ContextMenuState {
   x: number;
   y: number;
-  node: Node | null;
+  node: FileNode | null;
 }
 
 interface ExplorerStore {
@@ -13,8 +13,8 @@ interface ExplorerStore {
   setCurrentFolderId: (id: string | null) => void;
 
   // История для breadcrumb
-  breadcrumbs: Node[];
-  pushBreadcrumb: (node: Node) => void;
+  breadcrumbs: FileNode[];
+  pushBreadcrumb: (node: FileNode) => void;
   popBreadcrumbTo: (id: string | null) => void;
 
   // Выбранные узлы
@@ -24,7 +24,7 @@ interface ExplorerStore {
 
   // Контекстное меню
   contextMenu: ContextMenuState | null;
-  openContextMenu: (x: number, y: number, node: Node | null) => void;
+  openContextMenu: (x: number, y: number, node: FileNode | null) => void;
   closeContextMenu: () => void;
 
   // Модалки
@@ -34,8 +34,8 @@ interface ExplorerStore {
   closeCreateModal: () => void;
 
   isRenameModalOpen: boolean;
-  renameTarget: Node | null;
-  openRenameModal: (node: Node) => void;
+  renameTarget: FileNode | null;
+  openRenameModal: (node: FileNode) => void;
   closeRenameModal: () => void;
 }
 
@@ -46,7 +46,20 @@ export const useExplorerStore = create<ExplorerStore>((set) => ({
 
   breadcrumbs: [],
   pushBreadcrumb: (node) =>
-    set((s) => ({ breadcrumbs: [...s.breadcrumbs, node] })),
+    set((s) => {
+      const existingIndex = s.breadcrumbs.findIndex(
+        (breadcrumb) => breadcrumb.id === node.id,
+      );
+
+      if (existingIndex !== -1) {
+        return {
+          breadcrumbs: s.breadcrumbs.slice(0, existingIndex + 1),
+          currentFolderId: node.id,
+        };
+      }
+
+      return { breadcrumbs: [...s.breadcrumbs, node] };
+    }),
   popBreadcrumbTo: (id) =>
     set((s) => ({
       breadcrumbs:
@@ -54,7 +67,7 @@ export const useExplorerStore = create<ExplorerStore>((set) => ({
           ? []
           : s.breadcrumbs.slice(
               0,
-              s.breadcrumbs.findIndex((b) => b.id === id) + 1,
+              s.breadcrumbs.findIndex((breadcrumb) => breadcrumb.id === id) + 1,
             ),
       currentFolderId: id,
       selectedIds: new Set(),
@@ -65,8 +78,11 @@ export const useExplorerStore = create<ExplorerStore>((set) => ({
     set((s) => {
       if (multi) {
         const next = new Set(s.selectedIds);
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        next.has(id) ? next.delete(id) : next.add(id);
+        if (next.has(id)) {
+          next.delete(id);
+        } else {
+          next.add(id);
+        }
         return { selectedIds: next };
       }
       return { selectedIds: new Set([id]) };

@@ -1,6 +1,6 @@
 import { useChildren, useRootNodes, useSearch } from "../../hooks/useNodes";
 import { useExplorerStore } from "../../store/explorerStore";
-import type { Node } from "../../types";
+import type { FileNode } from "../../types";
 import { FileItem } from "./FileItem";
 
 interface Props {
@@ -22,7 +22,7 @@ export function FileGrid({ search }: Props) {
   const nodes =
     search.length > 1 ? searchResults : currentFolderId ? children : rootNodes;
 
-  const handleDoubleClick = (node: Node) => {
+  const handleDoubleClick = (node: FileNode) => {
     if (node.type === "FOLDER") {
       setCurrentFolderId(node.id);
       pushBreadcrumb(node);
@@ -49,7 +49,6 @@ export function FileGrid({ search }: Props) {
       className="flex flex-wrap gap-2 content-start"
       onClick={handleBackgroundClick}
     >
-      {/* Сначала папки, потом файлы */}
       {[...nodes]
         .sort((a, b) => {
           if (a.type === b.type) return a.name.localeCompare(b.name);

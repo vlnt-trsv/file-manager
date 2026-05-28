@@ -6,20 +6,17 @@ import {
   Music,
   Film,
   Folder,
-  FolderOpen,
-  Trash2,
-  Pencil,
 } from "lucide-react";
 import { useMoveNode } from "../../hooks/useNodes";
-import type { Node } from "../../types";
+import type { FileNode } from "../../types";
 import { useExplorerStore } from "../../store/explorerStore";
 
 interface Props {
-  node: Node;
-  onDoubleClick: (node: Node) => void;
+  node: FileNode;
+  onDoubleClick: (node: FileNode) => void;
 }
 
-function getIcon(node: Node) {
+function getIcon(node: FileNode) {
   if (node.type === "FOLDER")
     return <Folder size={40} className="text-yellow-400" />;
 
